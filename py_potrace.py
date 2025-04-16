@@ -25,7 +25,7 @@ for filename in os.listdir(input_dir):
 
                 # 用 potrace 生成 SVG
                 try:
-                    subprocess.run(["potrace", "-b", "svg", "-o", svg_path, tmp_bmp.name], check=True)
+                    subprocess.run(["potrace", "-b", "svg", "--width", "1024", "--height", "1024", "-o", svg_path, tmp_bmp.name], check=True)
                     print(f"✅ 已生成 SVG：{svg_path}")
                 except subprocess.CalledProcessError as e:
                     print(f"❌ potrace 转换失败：{e}")
