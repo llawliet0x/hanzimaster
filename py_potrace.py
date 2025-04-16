@@ -14,15 +14,21 @@ def fix_svg_viewbox(svg_path):
     tree = ET.parse(svg_path)
     root = tree.getroot()
     
+    # 计算缩放比例
+    original_size = 73728
+    target_size = 1024
+    scale_factor = target_size / original_size
+    
     # 修改 viewBox
-    root.set('viewBox', '0 0 1024 1024')
-    root.set('width', '1024')
-    root.set('height', '1024')
+    root.set('viewBox', f'0 0 {target_size} {target_size}')
+    root.set('width', str(target_size))
+    root.set('height', str(target_size))
     
     # 修改 transform
     for g in root.findall('.//{http://www.w3.org/2000/svg}g'):
         if 'transform' in g.attrib:
-            g.set('transform', 'scale(1, -1) translate(0, -1024)')
+            # 保持原始比例关系，但缩放到目标大小
+            g.set('transform', f'translate(0,{target_size}) scale({scale_factor},-{scale_factor})')
     
     # 保存修改后的文件
     tree.write(svg_path, encoding='utf-8', xml_declaration=True)
